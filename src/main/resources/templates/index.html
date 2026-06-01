@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>M3 Assistant</title>
+</head>
+<body>
+
+<h1>Добро пожаловать в M3 Assistant!</h1>
+
+<!-- Наша форма для отправки данных на бэкенд -->
+<form action="/send" method="post">
+    <label for="userInput">Введите сообщение для сервера:</label>
+    <input type="text" id="userInput" name="userInput" placeholder="Напишите что-нибудь..." required>
+    <button type="submit">Отправить на бэкенд</button>
+</form>
+
+<br><br>
+
+<!-- Блок для отображения ответа от Java-кода -->
+<div th:if="${responseMessage}">
+    <h3>Ответ от сервера:</h3>
+    <p style="color: green; font-weight: bold;" th:text="${responseMessage}"></p>
+</div>
+
+</body>
+</html>
