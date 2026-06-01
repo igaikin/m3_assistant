@@ -2,26 +2,49 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>M3 Assistant</title>
+    <title>M3 Assistant - Панель управления</title>
 </head>
 <body>
 
-<h1>Добро пожаловать в M3 Assistant!</h1>
+<h1>M3 Assistant: Управление расписаниями</h1>
 
-<!-- Наша форма для отправки данных на бэкенд -->
-<form action="/send" method="post">
-    <label for="userInput">Введите сообщение для сервера:</label>
-    <input type="text" id="userInput" name="userInput" placeholder="Напишите что-нибудь..." required>
-    <button type="submit">Отправить на бэкенд</button>
+<h3>Добавить новое расписание (База данных Java)</h3>
+<form action="/add-schedule" method="post">
+    <p>
+        <label>Название:</label><br>
+        <input type="text" name="title" placeholder="например, Автобус Полоцк-Минск" style="width: 300px;" required>
+    </p>
+    <p>
+        <label>Текст расписания (сырые данные):</label><br>
+        <textarea name="rawText" rows="5" style="width: 300px;" placeholder="Вставьте текст или график..." required></textarea>
+    </p>
+    <button type="submit">Сохранить в базу данных</button>
 </form>
 
-<br><br>
+<hr>
 
-<!-- Блок для отображения ответа от Java-кода -->
-<div th:if="${responseMessage}">
-    <h3>Ответ от сервера:</h3>
-    <p style="color: green; font-weight: bold;" th:text="${responseMessage}"></p>
-</div>
+<h3>Архив расписаний в базе данных:</h3>
+<table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Сырой текст</th>
+        <th>Дата создания</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="sch : ${schedules}">
+        <td th:text="${sch.id}">1</td>
+        <td th:text="${sch.title}">Название</td>
+        <td th:text="${sch.rawText}">Текст</td>
+        <td th:text="${sch.createdAt}">Дата</td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(schedules)}">
+        <td colspan="4" style="text-align: center; color: gray;">База данных пока пуста</td>
+    </tr>
+    </tbody>
+</table>
 
 </body>
 </html>
