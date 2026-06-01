@@ -5,30 +5,26 @@ import io.github.m3_assistant.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
+// Регистрирует класс в Spring-контексте как компонент сервисного слоя
 @Service
 public class ScheduleService {
 
+// Финальная ссылка на репозиторий для безопасного обращения к БД
 private final ScheduleRepository scheduleRepository;
 
-// Внедряем репозиторий через конструктор
+// Внедрение зависимости репозитория через конструктор (Рекомендуемый подход Spring)
 public ScheduleService(ScheduleRepository scheduleRepository) {
     this.scheduleRepository = scheduleRepository;
 }
 
-// Метод для сохранения нового расписания в базу данных
-public Schedule saveSchedule(String title, String rawText) {
-    Schedule schedule = new Schedule();
-    schedule.setTitle(title);
-    schedule.setRawText(rawText);
-
-    // Тут в будущем будет вызов метода OCR для парсинга сырого текста в структурированный вид
-    schedule.setStructuredJson("{ \"status\": \"not_parsed_yet\" }");
-
-    return scheduleRepository.save(schedule);
-}
-
-// Метод для получения всех расписаний из базы данных
+// Бизнес-метод для получения абсолютно всех строк из таблицы schedules
 public List<Schedule> getAllSchedules() {
     return scheduleRepository.findAll();
+}
+
+// Бизнес-метод для упаковки параметров с формы в объект Schedule и сохранения в Postgres
+public void saveSchedule(String title, String rawText) {
+    Schedule schedule = new Schedule(title, rawText);
+    scheduleRepository.save(schedule);
 }
 }

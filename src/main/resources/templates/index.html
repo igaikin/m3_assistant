@@ -1,50 +1,66 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>M3 Assistant - Панель управления</title>
+    <title>M3 Assistant</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; background-color: #f9f9f9; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input[type="text"], textarea { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        textarea { height: 120px; resize: vertical; }
+        button { padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #0056b3; }
+        table { width: 100%; border-collapse: collapse; margin-top: 30px; }
+        th, td { border: 1px solid #dee2e6; padding: 12px; text-align: left; }
+        th { background-color: #f8f9fa; font-weight: bold; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+    </style>
 </head>
 <body>
 
-<h1>M3 Assistant: Управление расписаниями</h1>
+<div class="container">
+    <h1>M3 Assistant: Управление расписаниями</h1>
 
-<h3>Добавить новое расписание (База данных Java)</h3>
-<form action="/add-schedule" method="post">
-    <p>
-        <label>Название:</label><br>
-        <input type="text" name="title" placeholder="например, Автобус Полоцк-Минск" style="width: 300px;" required>
-    </p>
-    <p>
-        <label>Текст расписания (сырые данные):</label><br>
-        <textarea name="rawText" rows="5" style="width: 300px;" placeholder="Вставьте текст или график..." required></textarea>
-    </p>
-    <button type="submit">Сохранить в базу данных</button>
-</form>
+    <h3>Добавить новое расписание (PostgreSQL)</h3>
+    <form action="/add-schedule" method="post">
+        <div class="form-group">
+            <label for="title">Название расписания:</label>
+            <input type="text" id="title" name="title" placeholder="например, Автобус Полоцк-Минск" required>
+        </div>
+        <div class="form-group">
+            <label for="rawText">Исходный текст (данные для обработки):</label>
+            <textarea id="rawText" name="rawText" placeholder="Вставьте сюда сырой текст графика или расписания..." required></textarea>
+        </div>
+        <button type="submit">Сохранить в базу данных</button>
+    </form>
 
-<hr>
+    <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
 
-<h3>Архив расписаний в базе данных:</h3>
-<table border="1" cellpadding="5" cellspacing="0">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Название</th>
-        <th>Сырой текст</th>
-        <th>Дата создания</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="sch : ${schedules}">
-        <td th:text="${sch.id}">1</td>
-        <td th:text="${sch.title}">Название</td>
-        <td th:text="${sch.rawText}">Текст</td>
-        <td th:text="${sch.createdAt}">Дата</td>
-    </tr>
-    <tr th:if="${#lists.isEmpty(schedules)}">
-        <td colspan="4" style="text-align: center; color: gray;">База данных пока пуста</td>
-    </tr>
-    </tbody>
-</table>
+    <h3>Архив записей в PostgreSQL:</h3>
+    <table>
+        <thead>
+        <tr>
+            <th style="width: 8%;">ID</th>
+            <th style="width: 25%;">Название</th>
+            <th>Сырой текст</th>
+            <th style="width: 22%;">Дата создания</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${schedules.empty}">
+            <td colspan="4" style="text-align: center; color: #888;">В базе данных пока нет сохраненных расписаний</td>
+        </tr>
+        <tr th:each="schedule : ${schedules}">
+            <td th:text="${schedule.id}">1</td>
+            <td th:text="${schedule.title}">Название</td>
+            <td th:text="${schedule.rawText}">Текст</td>
+            <td th:text="${#temporals.format(schedule.createdAt, 'dd.MM.yyyy HH:mm')}">01.06.2026 15:00</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>
