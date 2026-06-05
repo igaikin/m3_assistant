@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление нового пользователя</title>
+</head>
+<body>
+<h2>Добавление нового пользователя</h2>
+<div th:if="${error}" style="color: red;">
+    <p th:text="${error}"></p>
+</div>
+
+<form th:action="@{/admin/users/create}" th:object="${user}" method="post">
+</form>
+<form th:action="@{/admin/users/create}" th:object="${user}" method="post">
+
+    <label>Email:</label>
+    <input type="text" th:field="*{email}" required><br>
+
+    <label>Имя:</label>
+    <input type="text" th:field="*{firstName}" required><br>
+
+    <label>Пароль:</label>
+    <input type="password" th:field="*{password}" required><br>
+
+    <label>Роль:</label>
+    <select th:field="*{role}">
+        <option th:each="r : ${roles}"
+                th:value="${r.id}"
+                th:text="${r.role}">
+        </option>
+    </select><br>
+
+    <button type="submit">Создать</button>
+    <a th:href="@{/admin/users}">Отмена</a>
+</form>
+</body>
+</html>

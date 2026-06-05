@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+</head>
+<body>
+<h1>Добро пожаловать в систему M3 Assistant!</h1>
+<div sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
+    <a th:href="@{/admin/dashboard}" class="btn">Панель администратора</a>
+</div>
+<br>
+<div>
+    <div class="avatar"><span th:text="${user.avatar}"></span></div>
+    <h1>Добро пожаловать, <span th:text="${user.surname+' '+user.firstName+' '+user.patronymic}"></span>!</h1>
+    <p>Ваша должность: <span th:text="${user.profession.profession}"></span></p>
+    <p>Табельный номер: <span th:text="${user.personnelNumber}"></span></p>
+    <p>Класс квалификации: <span th:text="${user.qualificationClass.getQualificationClass}"></span></p>
+    <p>Состав: <span th:text="${user.train.train}"></span></p>
+</div>
+<br>
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Выйти</button>
+</form>
+</body>
+</html>
