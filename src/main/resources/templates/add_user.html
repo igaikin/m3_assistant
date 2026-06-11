@@ -10,24 +10,48 @@
     <p th:text="${error}"></p>
 </div>
 
-<form th:action="@{/admin/users/create}" th:object="${user}" method="post">
-</form>
-<form th:action="@{/admin/users/create}" th:object="${user}" method="post">
+<!--<form th:action="@{/admin/users/create}" th:object="${user}" method="post">-->
+<!--</form>-->
+<form th:action="@{/admin/users/create}" th:object="${user}" method="post" enctype="multipart/form-data">
 
     <label>Email:</label>
     <input type="text" th:field="*{email}" required><br>
-
     <label>Имя:</label>
     <input type="text" th:field="*{firstName}" required><br>
-
+    <label>Фамилия:</label>
+    <input type="text" th:field="*{surname}" required><br>
+    <label>Отчество:</label>
+    <input type="text" th:field="*{patronymic}" required><br>
+    <label>Табельный номер:</label>
+    <input type="text" th:field="*{personnelNumber}" required><br>
+    <label>Аватар:</label>
+    <input type="file" name="file">
+    <button type="submit">Сохранить</button>
     <label>Пароль:</label>
     <input type="password" th:field="*{password}" required><br>
-
     <label>Роль:</label>
     <select th:field="*{role}">
         <option th:each="r : ${roles}"
                 th:value="${r.id}"
                 th:text="${r.role}">
+        </option>
+    </select><br>
+    <select th:field="*{train}">
+        <option th:each="t : ${trains}"
+                th:value="${t.id}"
+                th:text="${t.train}">
+        </option>
+    </select><br>
+    <select th:field="*{qualificationClass}">
+        <option th:each="q : ${qualification_classes}"
+                th:value="${q.id}"
+                th:text="${q.qualificationClass}">
+        </option>
+    </select><br>
+    <select th:field="*{profession}">
+        <option th:each="p : ${professions}"
+                th:value="${p.id}"
+                th:text="${p.profession}">
         </option>
     </select><br>
 

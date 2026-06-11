@@ -15,6 +15,12 @@
     <li>
         <a th:href="@{/admin/users/add}">Добавить нового пользователя</a>
     </li>
+    <li>
+        <form th:action="@{/files/upload}" method="post" enctype="multipart/form-data">
+            <input type="file" name="file"/>
+            <button type="submit">Загрузить</button>
+        </form>
+    </li>
 </ul>
 <a href="/home">На главную</a>
 </body>

@@ -13,11 +13,11 @@ import lombok.Setter;
 @NoArgsConstructor // Конструктор без аргументов (обязателен для Hibernate)
 @AllArgsConstructor // Конструктор со всеми полями
 public class User {
-
+// Константа для аватара по умолчанию
+public static final String DEFAULT_AVATAR = "/images/noAvatar.png";
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
-
 private String avatar;
 private String firstName;
 private String surname;

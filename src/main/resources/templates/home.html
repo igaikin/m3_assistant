@@ -11,13 +11,29 @@
 </div>
 <br>
 <div>
-    <div class="avatar"><span th:text="${user.avatar}"></span></div>
+    <div class="avatar"><img th:if="${user.avatar != null && user.avatar != ''}"
+                             th:src="@{${user.avatar}}"
+                             alt="Аватар"
+                             style="width: 300px; height: 300px; border-radius: 50%; object-fit: cover;">
+        <img th:if="${user.avatar == null || user.avatar == ''}"
+             src="/images/noAvatar.png"
+             alt="Нет фото"
+             style="width: 300px; height: 300px; border-radius: 50%;"></div>
     <h1>Добро пожаловать, <span th:text="${user.surname+' '+user.firstName+' '+user.patronymic}"></span>!</h1>
     <p>Ваша должность: <span th:text="${user.profession.profession}"></span></p>
     <p>Табельный номер: <span th:text="${user.personnelNumber}"></span></p>
     <p>Класс квалификации: <span th:text="${user.qualificationClass.getQualificationClass}"></span></p>
     <p>Состав: <span th:text="${user.train.train}"></span></p>
 </div>
+<br>
+<h3>Доступные документы:</h3>
+<ul>
+    <li th:each="file : ${files}">
+        <a th:href="@{/files/download/{filename}(filename=${file})}" th:text="${file}" target="_blank">Имя файла</a>
+    </li>
+</ul>
+
+<a href="/files/list">Перейти к полному архиву файлов</a>
 <br>
 <form th:action="@{/logout}" method="post">
     <button type="submit">Выйти</button>

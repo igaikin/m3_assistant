@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
+<head>
+    <title>Список файлов</title>
+</head>
+<body>
+<h1>Общий архив файлов</h1>
+
+<div sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
+    <h3>Загрузить новый файл:</h3>
+    <form th:action="@{/files/upload}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" required/>
+        <button type="submit">Загрузить</button>
+    </form>
+</div>
+
+<hr>
+
+<h3>Список доступных файлов:</h3>
+<ul>
+    <li th:each="file : ${files}">
+        <a th:href="@{/files/download/{filename}(filename=${file})}" th:text="${file}" target="_blank">Имя файла</a>
+
+        <form sec:authorize="hasAnyRole('ADMIN', 'MANAGER')"
+              th:action="@{/files/delete/{filename}(filename=${file})}"
+              method="post" style="display:inline; margin-left: 10px;">
+            <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить этот файл?')">Удалить</button>
+        </form>
+    </li>
+</ul>
+
+<br>
+<a href="/home">Назад</a>
+</body>
+</html>
