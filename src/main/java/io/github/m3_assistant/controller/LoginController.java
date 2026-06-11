@@ -7,15 +7,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class LoginController {
-
+@GetMapping("/")
+public String redirectToIndex() {
+    return "redirect:/index";
+}
 /**
  * Обрабатывает запрос на страницу входа.
  *
  * @param error Если в URL есть параметр ?error, Spring Security сигнализирует об ошибке входа.
  * @param model Передаем сообщение об ошибке в шаблон, если она есть.
  */
-@GetMapping("/login")
-public String login(@RequestParam(value = "error", required = false) String error,
+@GetMapping("/index")
+public String index(@RequestParam(value = "error", required = false) String error,
                     @RequestParam(value = "logout", required = false) String logout,
                     Model model) {
 
@@ -29,6 +32,6 @@ public String login(@RequestParam(value = "error", required = false) String erro
         model.addAttribute("message", "Вы успешно вышли из системы.");
     }
 
-    return "login"; // Возвращает шаблон login.html
+    return "index"; // Возвращает шаблон login.html
 }
 }

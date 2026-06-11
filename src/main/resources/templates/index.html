@@ -1,21 +1,36 @@
-<!--<!DOCTYPE html>-->
-<!--<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title>Вход в систему</title>-->
-<!--</head>-->
-<!--<body>-->
-<!--<h2>Авторизация</h2>-->
-<!--<form th:action="@{/login}" method="post">-->
-<!--    <div>-->
-<!--        <label>Email (Логин):</label>-->
-<!--        <input type="text" name="username" required/>-->
-<!--    </div>-->
-<!--    <div>-->
-<!--        <label>Пароль:</label>-->
-<!--        <input type="password" name="password" required/>-->
-<!--    </div>-->
-<!--    <button type="submit">Войти</button>-->
-<!--</form>-->
-<!--</body>-->
-<!--</html>-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход</title>
+</head>
+<body>
+<h2>Авторизация</h2>
+<form th:action="@{/login}" method="post">
+
+    <div th:if="${error != null}" style="color: red; padding: 10px; border: 1px solid red; margin-bottom: 10px;">
+        <p th:text="${error}"></p>
+    </div>
+
+    <div th:if="${message != null}" style="color: green; padding: 10px; margin-bottom: 10px;">
+        <p th:text="${message}"></p>
+    </div>
+
+    <div>
+        <label>Email:</label>
+        <input type="text" name="username">
+    </div>
+    <div>
+        <label>Пароль:</label>
+        <input type="password" name="password">
+    </div>
+
+    <div>
+        <input type="checkbox" name="remember-me" id="remember-me">
+        <label for="remember-me">Запомнить меня</label>
+    </div>
+
+    <button type="submit">Войти</button>
+</form>
+</body>
+</html>

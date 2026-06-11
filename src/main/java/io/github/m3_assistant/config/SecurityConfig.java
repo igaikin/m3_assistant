@@ -33,7 +33,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
             .authorizeHttpRequests(auth -> auth
                     // 1. Публичные ресурсы (доступны всем)
-                    .requestMatchers("/", "/login", "/css/**", "/js/**").permitAll()
+                    .requestMatchers("/", "/index", "/css/**", "/js/**").permitAll()
 
                     // 2. Управление файлами: удаление и загрузка только для ADMIN/MANAGER
                     .requestMatchers("/files/delete/**").hasAnyRole("ADMIN", "MANAGER")
@@ -49,7 +49,8 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                     .anyRequest().authenticated()
             )
             .formLogin(form -> form
-                    .loginPage("/login") // Указываем свой кастомный путь к странице входа
+                    .loginPage("/index") // Указываем свой кастомный путь к странице входа
+                    .loginProcessingUrl("/login") // Сюда форма отправляет POST-запрос
                     .defaultSuccessUrl("/home", true) // Куда перенаправить после успешного входа
                     .permitAll()
             )
@@ -61,7 +62,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             )
             .logout(logout -> logout
                     .logoutUrl("/logout") // URL для отправки POST запроса на выход
-                    .logoutSuccessUrl("/login?logout") // После выхода перенаправляем на страницу входа с параметром
+                    .logoutSuccessUrl("/index?logout") // После выхода перенаправляем на страницу входа с параметром
                     .invalidateHttpSession(true) // Удалить сессию
                     .deleteCookies("JSESSIONID") // Удалить куки
                     .permitAll()
