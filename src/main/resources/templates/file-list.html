@@ -7,9 +7,26 @@
 <h1>Общий архив файлов</h1>
 
 <div sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
+    <h3>Создать новую папку:</h3>
+    <form th:action="@{/files/create-folder}" method="post">
+        <input type="text" name="folderName" placeholder="Введите имя папки" required/>
+        <button type="submit">Создать</button>
+    </form>
+</div>
+
+<div sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
     <h3>Загрузить новый файл:</h3>
     <form th:action="@{/files/upload}" method="post" enctype="multipart/form-data">
         <input type="file" name="file" required/>
+        <input type="text" name="aliasName" placeholder="Отображаемое имя (необязательно)"/>
+        <select name="targetFolder">
+            <option value="Root">В корень (Root)</option>
+            <option th:each="entry : ${fileStructure}"
+                    th:if="${entry.key != 'Root'}"
+                    th:value="${entry.key}"
+                    th:text="${entry.key}"></option>
+        </select>
+
         <button type="submit">Загрузить</button>
     </form>
 </div>
@@ -17,19 +34,68 @@
 <hr>
 
 <h3>Список доступных файлов:</h3>
-<ul>
-    <li th:each="file : ${files}">
-        <a th:href="@{/files/download/{filename}(filename=${file})}" th:text="${file}" target="_blank">Имя файла</a>
+<div th:each="entry : ${fileStructure}">
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <h3 th:text="${entry.key}">Имя папки</h3>
+        <div sec:authorize="hasAnyRole('ADMIN', 'MANAGER')" th:if="${entry.key != 'Root'}">
+            <form th:action="@{/files/rename-folder}" method="post" style="display: inline;">
+                <input type="hidden" name="oldName" th:value="${entry.key}"/>
+                <input type="text" name="newName" placeholder="Новое имя" required style="width: 100px;"/>
+                <button type="submit">OK</button>
+            </form>
+        </div>
+        <div sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
+            <form th:if="${entry.key != 'Root'}" th:action="@{/files/delete-folder}" method="post">
+                <input type="hidden" name="folderName" th:value="${entry.key}"/>
+                <button type="submit" onclick="return confirm('Удалить папку со всеми файлами?')">Удалить папку</button>
+            </form>
+        </div>
+    </div>
 
-        <form sec:authorize="hasAnyRole('ADMIN', 'MANAGER')"
-              th:action="@{/files/delete/{filename}(filename=${file})}"
-              method="post" style="display:inline; margin-left: 10px;">
-            <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить этот файл?')">Удалить</button>
-        </form>
-    </li>
-</ul>
+    <ul>
+        <li th:each="file : ${entry.value}" style="margin-bottom: 5px;">
+            <a th:href="@{/files/download/{folder}/{filename}(folder=${entry.key}, filename=${file})}"
+               th:text="${aliasMap[file.trim()] ?: file}"
+               target="_blank">Имя файла</a>
+
+            <form sec:authorize="hasAnyRole('ADMIN', 'MANAGER')"
+                  th:action="@{/files/rename-alias}" method="post" style="display: inline; margin-left: 10px;">
+                <input type="hidden" name="originalFileName" th:value="${file}"/>
+                <input type="hidden" name="folder" th:value="${entry.key}"/>
+                <input type="text" name="newAlias" placeholder="Новое имя" style="width: 120px;"/>
+                <button type="submit">Переименовать</button>
+            </form>
+            <form sec:authorize="hasAnyRole('ADMIN', 'MANAGER')"
+                  th:action="@{/files/move}" method="post" style="display: inline; margin-left: 10px;">
+                <input type="hidden" name="filename" th:value="${file}"/>
+                <input type="hidden" name="sourceFolder" th:value="${entry.key}"/>
+                <select name="targetFolder" onchange="this.form.submit()">
+                    <option value="">Переместить в...</option>
+                    <option value="Root">Root</option>
+                    <option th:each="folder : ${fileStructure.keySet()}"
+                            th:if="${folder != 'Root' && folder != entry.key}"
+                            th:value="${folder}"
+                            th:text="${folder}"></option>
+                    <buttom type="submit">Переместить</buttom>
+                </select>
+            </form>
+            <form sec:authorize="hasAnyRole('ADMIN', 'MANAGER')"
+                  th:action="@{/files/delete/{filename}(filename=${file})}" method="post"
+                  style="display: inline; margin-left: 10px;">
+                <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить этот файл?');"
+                        style="color: red; cursor: pointer;">Удалить
+                </button>
+            </form>
+        </li>
+    </ul>
+</div>
 
 <br>
 <a href="/home">Назад</a>
 </body>
 </html>
+
+<!--+375296052974-->
+<!--максим 93 гараж-->
+
+<!--+375291120964 телефон гаража-->

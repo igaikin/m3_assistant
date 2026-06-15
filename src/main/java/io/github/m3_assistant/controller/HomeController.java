@@ -28,7 +28,7 @@ public String showHomePage(Model model, @AuthenticationPrincipal UserDetails cur
     User user = userRepository.findByEmail(currentUser.getUsername()).get();
     model.addAttribute("user", user);
     // Добавляем список файлов в модель, чтобы он был доступен на главной
-    model.addAttribute("files", storageService.loadAllFiles());
+    model.addAttribute("fileStructure", storageService.listFilesAndFolders());
     return "home"; // Имя вашего HTML шаблона
 }
 }

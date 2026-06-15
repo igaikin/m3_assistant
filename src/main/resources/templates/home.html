@@ -26,12 +26,17 @@
     <p>Состав: <span th:text="${user.train.train}"></span></p>
 </div>
 <br>
-<h3>Доступные документы:</h3>
-<ul>
-    <li th:each="file : ${files}">
-        <a th:href="@{/files/download/{filename}(filename=${file})}" th:text="${file}" target="_blank">Имя файла</a>
-    </li>
-</ul>
+<!--<h3>Доступные документы:</h3>-->
+<!--<div th:each="entry : ${fileStructure}">-->
+<!--    <h3 th:text="${entry.key}">Имя папки</h3>-->
+<!--    <ul>-->
+<!--        <li th:each="file : ${entry.value}">-->
+<!--            <a th:href="@{/files/download/{folder}/{filename}(folder=${entry.key}, filename=${file})}"-->
+<!--               th:text="${aliasMap[entry.key + ':' + file] ?: file}"-->
+<!--               target="_blank">Имя файла</a>-->
+<!--        </li>-->
+<!--    </ul>-->
+<!--</div>-->
 
 <a href="/files/list">Перейти к полному архиву файлов</a>
 <br>

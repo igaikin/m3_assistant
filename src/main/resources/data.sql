@@ -4,6 +4,8 @@ TRUNCATE qualificationClass CASCADE;
 TRUNCATE roles CASCADE;
 TRUNCATE professions CASCADE;
 TRUNCATE trains CASCADE;
+TRUNCATE file_alias CASCADE;
+
 
  */
 INSERT INTO qualification_classes (id, qualification_class)
