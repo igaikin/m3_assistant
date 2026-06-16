@@ -25,6 +25,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @PropertySource("classpath:application.properties")
 @PropertySource(value = "classpath:application-secret.properties", ignoreResourceNotFound = true)
 public class SecurityConfig {
+private static final String MANAGER = "MANAGER";
+private static final String ADMIN = "ADMIN";
 @Value("${app.security.remember-me-key}")
 private String rememberMeKey;
 
@@ -36,14 +38,14 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                     .requestMatchers("/", "/index", "/css/**", "/js/**").permitAll()
 
                     // 2. Управление файлами: удаление и загрузка только для ADMIN/MANAGER
-                    .requestMatchers("/files/delete/**").hasAnyRole("ADMIN", "MANAGER")
-                    .requestMatchers("/files/upload").hasAnyRole("ADMIN", "MANAGER")
+                    .requestMatchers("/files/delete/**").hasAnyRole(ADMIN, MANAGER)
+                    .requestMatchers("/files/upload").hasAnyRole(ADMIN, MANAGER)
 
                     // 3. Доступ к остальным операциям с файлами: всем авторизованным
                     .requestMatchers("/files/**").authenticated()
 
                     // 4. Админ-панель
-                    .requestMatchers("/admin/**").hasAnyRole("ADMIN", "MANAGER")
+                    .requestMatchers("/admin/**").hasAnyRole(ADMIN, MANAGER)
 
                     // 5. Все остальные страницы требуют авторизации
                     .anyRequest().authenticated()
