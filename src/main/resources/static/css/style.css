@@ -1,0 +1,31 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.day {
+    border: 1px solid #ccc;
+    padding: 10px;
+    min-height: 150px;
+}
+
+.today {
+    background-color: #ffeb3b;
+}
+
+/* Желтый цвет для сегодня */
+.day-header {
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 колонок для 7 дней */
+    gap: 5px;
+    margin-top: 20px;
+}

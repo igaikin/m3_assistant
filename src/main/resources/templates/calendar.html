@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Календарь</title>
+</head>
+<body>
+
+<div class="header">
+    <a th:href="@{/calendar(year=${month == 1 ? year-1 : year}, month=${month == 1 ? 12 : month-1})}">Назад</a>
+    <span th:text="${month} + ' / ' + ${year}"></span>
+    <a th:href="@{/calendar(year=${month == 12 ? year+1 : year}, month=${month == 12 ? 1 : month+1})}">Вперед</a>
+</div>
+
+<div class="grid" id="calendarGrid">
+    <div class="day-header">Пн</div>
+    <div class="day-header">Вт</div>
+    <div class="day-header">Ср</div>
+    <div class="day-header">Чт</div>
+    <div class="day-header">Пт</div>
+    <div class="day-header">Сб</div>
+    <div class="day-header">Вс</div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<a href="/home">На главную</a>
+
+<script th:inline="javascript">
+    const year = [[${year}]];
+    const month = [[${month}]];
+    const today = new Date();
+
+    const grid = document.getElementById('calendarGrid');
+    const daysInMonth = new Date(year, month, 0).getDate();
+
+    // Находим, с какого дня недели начинается месяц (0 = вс, 1 = пн, ...)
+    const firstDay = new Date(year, month - 1, 1).getDay();
+    // Корректируем, чтобы пн=0, вс=6
+    const offset = (firstDay === 0) ? 6 : firstDay - 1;
+
+    // Добавляем пустые ячейки для начала месяца
+    for (let i = 0; i < offset; i++) {
+        const emptyDiv = document.createElement('div');
+        // Добавляем класс 'day' для структуры сетки и 'empty' для визуального скрытия
+        emptyDiv.className = 'day empty';
+        grid.appendChild(emptyDiv);
+    }
+
+    // Добавляем дни
+    for (let i = 1; i <= daysInMonth; i++) {
+        const div = document.createElement('div');
+        div.className = 'day';
+        div.innerText = i;
+
+        if (i === today.getDate() && month === today.getMonth() + 1 && year === today.getFullYear()) {
+            div.classList.add('today');
+        }
+        grid.appendChild(div);
+    }
+
+</script>
+
+</body>
+</html>

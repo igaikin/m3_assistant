@@ -26,17 +26,29 @@
     <p>Состав: <span th:text="${user.train.train}"></span></p>
 </div>
 <br>
-<!--<h3>Доступные документы:</h3>-->
-<!--<div th:each="entry : ${fileStructure}">-->
-<!--    <h3 th:text="${entry.key}">Имя папки</h3>-->
-<!--    <ul>-->
-<!--        <li th:each="file : ${entry.value}">-->
-<!--            <a th:href="@{/files/download/{folder}/{filename}(folder=${entry.key}, filename=${file})}"-->
-<!--               th:text="${aliasMap[entry.key + ':' + file] ?: file}"-->
-<!--               target="_blank">Имя файла</a>-->
-<!--        </li>-->
-<!--    </ul>-->
-<!--</div>-->
+<div style="margin: 20px 0;">
+    <a th:href="@{/calendar}" class="btn-calendar">
+        Открыть календарь событий
+    </a>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<div class="navigation-panel">
+    <div class="card">
+        <h3>Планировщик</h3>
+        <p>Просмотр событий и важных дат</p>
+        <a th:href="@{/calendar}" style="padding: 10px; background: #007bff; color: white; text-decoration: none; border-radius: 5px;">
+            Перейти к календарю
+        </a>
+    </div>
+</div>
+
+<br>
+<br>
+<br>
 
 <a href="/files/list">Перейти к полному архиву файлов</a>
 <br>
