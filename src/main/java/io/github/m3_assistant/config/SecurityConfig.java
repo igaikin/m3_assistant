@@ -37,17 +37,19 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                     // 1. Публичные ресурсы (доступны всем)
                     .requestMatchers("/", "/index", "/css/**", "/js/**").permitAll()
 
-                    // 2. Управление файлами: удаление и загрузка только для ADMIN/MANAGER
-                    .requestMatchers("/files/delete/**").hasAnyRole(ADMIN, MANAGER)
-                    .requestMatchers("/files/upload").hasAnyRole(ADMIN, MANAGER)
+                    // 2. ОГРАНИЧЕНИЕ: Создание и удаление событий только для ADMIN и MANAGER
+                    .requestMatchers("/events/add", "/events/delete/**").hasAnyRole(ADMIN, MANAGER)
 
-                    // 3. Доступ к остальным операциям с файлами: всем авторизованным
+                    // 3. Управление файлами: удаление и загрузка только для ADMIN/MANAGER
+                    .requestMatchers("/files/delete/**", "/files/upload").hasAnyRole(ADMIN, MANAGER)
+
+                    // 4. Доступ к остальным операциям с файлами: всем авторизованным
                     .requestMatchers("/files/**").authenticated()
 
-                    // 4. Админ-панель
+                    // 5. Админ-панель
                     .requestMatchers("/admin/**").hasAnyRole(ADMIN, MANAGER)
 
-                    // 5. Все остальные страницы требуют авторизации
+                    // 6. Все остальные страницы требуют авторизации
                     .anyRequest().authenticated()
             )
             .formLogin(form -> form

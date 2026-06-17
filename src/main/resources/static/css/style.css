@@ -7,7 +7,7 @@
 .day {
     border: 1px solid #ccc;
     padding: 10px;
-    min-height: 150px;
+    min-height: 80px;
 }
 
 .today {
@@ -28,4 +28,21 @@
     grid-template-columns: repeat(7, 1fr); /* 7 колонок для 7 дней */
     gap: 5px;
     margin-top: 20px;
+}
+
+.event-item {
+    font-size: 11px;
+    background: #e3f2fd;
+    border-radius: 3px;
+    margin-top: 2px;
+    padding: 2px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.event-item button {
+    border: none;
+    background: transparent;
+    color: red;
+    font-weight: bold;
 }

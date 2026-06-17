@@ -55,3 +55,9 @@ CREATE TABLE file_alias
     alias_name         VARCHAR(255),
     target_folder      VARCHAR(255)
 );
+
+CREATE TABLE calendar_event (
+                                id BIGSERIAL PRIMARY KEY,
+                                title VARCHAR(255),
+                                event_date DATE
+);
