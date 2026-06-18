@@ -2,58 +2,58 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
     <title>Главная</title>
 </head>
 <body>
-<h1>Добро пожаловать в систему M3 Assistant!</h1>
-<div sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
-    <a th:href="@{/admin/dashboard}" class="btn">Панель администратора</a>
-</div>
-<br>
-<div>
-    <div class="avatar"><img th:if="${user.avatar != null && user.avatar != ''}"
-                             th:src="@{${user.avatar}}"
-                             alt="Аватар"
-                             style="width: 300px; height: 300px; border-radius: 50%; object-fit: cover;">
-        <img th:if="${user.avatar == null || user.avatar == ''}"
-             src="/images/noAvatar.png"
-             alt="Нет фото"
-             style="width: 300px; height: 300px; border-radius: 50%;"></div>
-    <h1>Добро пожаловать, <span th:text="${user.surname+' '+user.firstName+' '+user.patronymic}"></span>!</h1>
-    <p>Ваша должность: <span th:text="${user.profession.profession}"></span></p>
-    <p>Табельный номер: <span th:text="${user.personnelNumber}"></span></p>
-    <p>Класс квалификации: <span th:text="${user.qualificationClass.getQualificationClass}"></span></p>
-    <p>Состав: <span th:text="${user.train.train}"></span></p>
-</div>
-<br>
-<div style="margin: 20px 0;">
-    <a th:href="@{/calendar}" class="btn-calendar">
-        Открыть календарь событий
-    </a>
-</div>
-
-<br>
-<br>
-<br>
-<br>
-<div class="navigation-panel">
-    <div class="card">
-        <h3>Планировщик</h3>
-        <p>Просмотр событий и важных дат</p>
-        <a th:href="@{/calendar}" style="padding: 10px; background: #007bff; color: white; text-decoration: none; border-radius: 5px;">
-            Перейти к календарю
-        </a>
+<div class="container">
+    <div class="left-side">
+        <h1>Добро пожаловать в систему M3 Assistant!</h1>
+        <div sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
+            <a th:href="@{/admin}" class="btn">Панель администратора</a>
+        </div>
+        <br>
+        <div>
+            <div class="avatar"><img th:if="${user.avatar != null && user.avatar != ''}"
+                                     th:src="@{${user.avatar}}"
+                                     alt="Аватар"
+                                     style="width: 300px; height: 300px; border-radius: 50%; object-fit: cover;">
+                <img th:if="${user.avatar == null || user.avatar == ''}"
+                     src="/images/noAvatar.png"
+                     alt="Нет фото"
+                     style="width: 300px; height: 300px; border-radius: 50%;"></div>
+            <h1>Добро пожаловать, <span th:text="${user.surname+' '+user.firstName+' '+user.patronymic}"></span>!</h1>
+            <p>Ваша должность: <span th:text="${user.profession.profession}"></span></p>
+            <p>Табельный номер: <span th:text="${user.personnelNumber}"></span></p>
+            <p>Класс квалификации: <span th:text="${user.qualificationClass.getQualificationClass}"></span></p>
+            <p>Состав: <span th:text="${user.train.train}"></span></p>
+        </div>
+        <br>
+        <div style="margin: 20px 0;">
+            <a th:href="@{/calendar}" class="btn-calendar">
+                Открыть календарь событий
+            </a>
+        </div>
+        <br>
+        <div class="navigation-panel">
+            <div class="card">
+                <h3>Планировщик</h3>
+                <p>Просмотр событий и важных дат</p>
+                <a th:href="@{/calendar}"
+                   style="padding: 10px; background: #007bff; color: white; text-decoration: none; border-radius: 5px;">
+                    Перейти к календарю
+                </a>
+            </div>
+        </div>
+        <br>
+        <a href="/files/list">Перейти к полному архиву файлов</a>
+        <br>
+    </div>
+    <div class="right-side">
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">Выйти</button>
+        </form>
     </div>
 </div>
-
-<br>
-<br>
-<br>
-
-<a href="/files/list">Перейти к полному архиву файлов</a>
-<br>
-<form th:action="@{/logout}" method="post">
-    <button type="submit">Выйти</button>
-</form>
 </body>
 </html>

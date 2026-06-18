@@ -2,85 +2,89 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
     <title>Редактирование</title>
 </head>
 <body>
-<h2>Редактирование данных</h2>
+<div class="container">
 
-<form th:action="@{/admin/users/update}" th:object="${user}" method="post" enctype="multipart/form-data">
+    <h2>Редактирование данных</h2>
 
-    <input type="hidden" th:field="*{id}">
-    <div>
-        <label>Аватар:</label>
-        <input type="file" name="file" accept="image/*">
-        <button type="submit">Сохранить</button>
-    </div>
-    <div>
-        <label>Фамилия:</label>
-        <input type="text" th:field="*{surname}">
-    </div>
-    <div>
-        <label>Имя:</label>
-        <input type="text" th:field="*{firstName}">
-    </div>
-    <div>
-        <label>Отчество:</label>
-        <input type="text" th:field="*{patronymic}">
-    </div>
-    <div>
-        <label>Табельный номер:</label>
-        <input type="text" th:field="*{personnelNumber}">
-    </div>
-    <div>
-        <label>Класс квалификации:</label>
-        <select th:field="*{qualificationClass}">
-            <option th:each="q : ${qualification_classes}"
-                    th:value="${q.id}"
-                    th:text="${q.qualificationClass}">
-            </option>
-        </select>
-    </div>
-    <div>
-        <label>Состав</label>
-        <select th:field="*{train}">
-            <option th:each="t : ${trains}"
-                    th:value="${t.id}"
-                    th:text="${t.train}">
-            </option>
-        </select>
-    </div>
-    <div>
-        <label>Должность:</label>
-        <select th:field="*{profession}">
-            <option th:each="p : ${professions}"
-                    th:value="${p.id}"
-                    th:text="${p.profession}">
-            </option>
-        </select>
-    </div>
-    <div>
-        <label>Роль:</label>
-        <label>
-            <select th:field="*{role}">
-                <option th:each="r : ${roles}"
-                        th:value="${r.id}"
-                        th:text="${r.role}">
+    <form th:action="@{/admin/users/update}" th:object="${user}" method="post" enctype="multipart/form-data">
+
+        <input type="hidden" th:field="*{id}">
+        <div>
+            <label>Аватар:</label>
+            <input type="file" name="file" accept="image/*">
+            <button type="submit">Сохранить</button>
+        </div>
+        <div>
+            <label>Фамилия:</label>
+            <input type="text" th:field="*{surname}">
+        </div>
+        <div>
+            <label>Имя:</label>
+            <input type="text" th:field="*{firstName}">
+        </div>
+        <div>
+            <label>Отчество:</label>
+            <input type="text" th:field="*{patronymic}">
+        </div>
+        <div>
+            <label>Табельный номер:</label>
+            <input type="text" th:field="*{personnelNumber}">
+        </div>
+        <div>
+            <label>Класс квалификации:</label>
+            <select th:field="*{qualificationClass}">
+                <option th:each="q : ${qualification_classes}"
+                        th:value="${q.id}"
+                        th:text="${q.qualificationClass}">
                 </option>
             </select>
-        </label>
-    </div>
-    <div>
-        <label>Почта:</label>
-        <input type="text" th:field="*{email}">
-    </div>
-    <div>
-        <label>Новый пароль (оставьте пустым, если менять не нужно):</label>
-        <input type="password" th:field="*{password}">
-    </div>
+        </div>
+        <div>
+            <label>Состав</label>
+            <select th:field="*{train}">
+                <option th:each="t : ${trains}"
+                        th:value="${t.id}"
+                        th:text="${t.train}">
+                </option>
+            </select>
+        </div>
+        <div>
+            <label>Должность:</label>
+            <select th:field="*{profession}">
+                <option th:each="p : ${professions}"
+                        th:value="${p.id}"
+                        th:text="${p.profession}">
+                </option>
+            </select>
+        </div>
+        <div>
+            <label>Роль:</label>
+            <label>
+                <select th:field="*{role}">
+                    <option th:each="r : ${roles}"
+                            th:value="${r.id}"
+                            th:text="${r.role}">
+                    </option>
+                </select>
+            </label>
+        </div>
+        <div>
+            <label>Почта:</label>
+            <input type="text" th:field="*{email}">
+        </div>
+        <div>
+            <label>Новый пароль (оставьте пустым, если менять не нужно):</label>
+            <input type="password" th:field="*{password}">
+        </div>
 
 
-    <button type="submit">Сохранить</button>
-    <a th:href="@{/admin/users}">Отмена</a>
-</form>
+        <button type="submit">Сохранить</button>
+        <a th:href="@{/admin/users}">Отмена</a>
+    </form>
+</div>
 </body>
 </html>

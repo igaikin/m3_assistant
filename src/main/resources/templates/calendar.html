@@ -8,35 +8,26 @@
     <title>Календарь</title>
 </head>
 <body>
+<div class="container">
 
-<div class="header">
-    <a th:href="@{/calendar(year=${month == 1 ? year-1 : year}, month=${month == 1 ? 12 : month-1})}">Назад</a>
-    <span th:text="${month} + ' / ' + ${year}"></span>
-    <a th:href="@{/calendar(year=${month == 12 ? year+1 : year}, month=${month == 12 ? 1 : month+1})}">Вперед</a>
-</div>
+    <div class="header">
+        <a th:href="@{/calendar(year=${month == 1 ? year-1 : year}, month=${month == 1 ? 12 : month-1})}">Назад</a>
+        <span th:text="${month} + ' / ' + ${year}"></span>
+        <a th:href="@{/calendar(year=${month == 12 ? year+1 : year}, month=${month == 12 ? 1 : month+1})}">Вперед</a>
+    </div>
 
-<div class="grid" id="calendarGrid">
-    <div class="day-header">Пн</div>
-    <div class="day-header">Вт</div>
-    <div class="day-header">Ср</div>
-    <div class="day-header">Чт</div>
-    <div class="day-header">Пт</div>
-    <div class="day-header">Сб</div>
-    <div class="day-header">Вс</div>
+    <div class="grid" id="calendarGrid">
+        <div class="day-header">Пн</div>
+        <div class="day-header">Вт</div>
+        <div class="day-header">Ср</div>
+        <div class="day-header">Чт</div>
+        <div class="day-header">Пт</div>
+        <div class="day-header">Сб</div>
+        <div class="day-header">Вс</div>
+    </div>
+    <br>
+    <a href="/home">На главную</a>
 </div>
-<br>
-<br>
-<div class="add-event-form" sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
-    <h3>Добавить событие</h3>
-    <form th:action="@{/events/add}" method="post">
-        <input type="text" name="title" placeholder="Название события" required>
-        <input type="date" name="date" required>
-        <button type="submit">Добавить</button>
-    </form>
-</div>
-<br>
-<br>
-<a href="/home">На главную</a>
 
 <script th:inline="javascript">
     const year = [[${year}]];
@@ -73,6 +64,7 @@
             const csrfToken = document.querySelector('meta[name="_csrf"]').content;
             // Используем относительный путь, который Spring точно поймет
             const deleteUrl = '/events/delete/' + e.id;
+            const canEdit = [[${canEdit}]];
 
             div.innerHTML += `<div class="event-item"><span>${e.title}</span>`;
 
@@ -84,7 +76,6 @@
                 <button type="submit" style="color:red; cursor:pointer;">x</button>
             </form>`;
             }
-
             div.innerHTML += `</div>`;
         });
 

@@ -1,11 +1,12 @@
 --CREATE DATABASE m3_db;
 /*
+DROP TABLE IF EXISTS calendar_event;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS qualification_classes;
 DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS professions;
 DROP TABLE IF EXISTS trains;
-
+DROP TABLE IF EXISTS file_alias;
 */
 
 CREATE TABLE IF NOT EXISTS qualification_classes
@@ -48,7 +49,7 @@ CREATE TABLE IF NOT EXISTS users
     password               VARCHAR(255)                                 NOT NULL
 );
 
-CREATE TABLE file_alias
+CREATE TABLE IF NOT EXISTS file_alias
 (
     id                 BIGSERIAL PRIMARY KEY,
     original_file_name VARCHAR(255) NOT NULL,
@@ -56,8 +57,10 @@ CREATE TABLE file_alias
     target_folder      VARCHAR(255)
 );
 
-CREATE TABLE calendar_event (
-                                id BIGSERIAL PRIMARY KEY,
-                                title VARCHAR(255),
-                                event_date DATE
+CREATE TABLE IF NOT EXISTS calendar_event
+(
+    id         BIGSERIAL PRIMARY KEY,
+    title      VARCHAR(255),
+    event_date DATE,
+    user_id    BIGINT REFERENCES users (id) ON DELETE CASCADE
 );

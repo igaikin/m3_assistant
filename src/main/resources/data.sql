@@ -22,9 +22,9 @@ VALUES (1, 'ADMIN'),
 ON CONFLICT DO NOTHING;
 
 INSERT INTO professions (id, profession)
-VALUES (1, 'DRIVER'),
-       (2, 'ENGINEER'),
-       (3, 'INSTRUCTOR')
+VALUES (1, 'Машинист'),
+       (2, 'Инженер'),
+       (3, 'Инструктор')
 ON CONFLICT DO NOTHING;
 
 INSERT INTO trains (id, train)
@@ -48,12 +48,15 @@ INSERT INTO users (avatar, first_name, surname, patronymic, personnel_number,
                    qualification_class_id, profession_id, role_id, train_id,
                    email, password)
 SELECT *
-FROM (VALUES ('images/noAvatar.png', 'Admin', 'Test', 'Test', '0001', 1, 1, 1, 1,
-              'admin', '$2a$12$eKFa90y6H.9J19CHHfZvj.2qSGZ02TZ6U8VdvfAvAh8vlKd6jqde6'),/*pass: 1111*/
-             ('images/noAvatar.png', 'Manager', 'Test', 'Test', '0002', 2, 2, 2, 99,
-              'manager', '$2a$12$8n7j0hAX3VJu744f7ahhz.AFDX3TTrWYhZUZBkobdQvGyVeb0dYK6'),/*pass: 2222*/
-             ('images/noAvatar.png', 'User', 'Test', 'Test', '0003', 3, 3, 3, 99,
-              'user', '$2a$12$xRSnoAUg0HbJox9UFHg6EuWiHI.w4QjV.SEwDUvgUw.07UeFKT.mu')/*pass: 3333*/)
+FROM (VALUES ('uploads/avatars/e85948c5-a4f7-4579-aa2c-2b36cc7eedcb_av_cute-possum-wearing-clothes.jpg', 'Илья',
+              'Гайкин', 'Викторович', '6177', 2, 1, 1, 1, 'admin',
+              '$2a$12$eKFa90y6H.9J19CHHfZvj.2qSGZ02TZ6U8VdvfAvAh8vlKd6jqde6'),/*pass: 1111*/
+             ('uploads/avatars/a5e981c5-64c5-49f9-9a16-673717b9a5b4_av_view-3d-cool-modern-bird.jpg', 'Виталий',
+              'Тихонович', 'Владимирович', '0002', 1, 3, 2, 99, 'manager',
+              '$2a$12$8n7j0hAX3VJu744f7ahhz.AFDX3TTrWYhZUZBkobdQvGyVeb0dYK6'),/*pass: 2222*/
+             ('uploads/avatars/aafe816d-5468-42d1-9ba3-f88c44e295d9_av_3d-rendering-young-tiger-city.jpg', 'Павел',
+              'Чистов', 'Александрович', '0003', 3, 1, 3, 4, 'user',
+              '$2a$12$xRSnoAUg0HbJox9UFHg6EuWiHI.w4QjV.SEwDUvgUw.07UeFKT.mu')/*pass: 3333*/)
          AS DATA
 WHERE NOT EXISTS (SELECT 1 FROM users);
 

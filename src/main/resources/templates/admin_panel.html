@@ -2,26 +2,194 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
     <title>Админ-панель</title>
 </head>
 <body>
-<h1>Панель администратора</h1>
-<p>Здесь будут отображаться инструменты управления системой.</p>
+<div class="container">
+    <h1>Панель администратора</h1>
+    <p>Здесь будут отображаться инструменты управления системой.</p>
 
-<ul>
-    <li>
-        <a th:href="@{/admin/users}">Посмотреть список всех пользователей</a>
-    </li>
-    <li>
-        <a th:href="@{/admin/users/add}">Добавить нового пользователя</a>
-    </li>
-    <li>
-        <form th:action="@{/files/upload}" method="post" enctype="multipart/form-data">
-            <input type="file" name="file"/>
-            <button type="submit">Загрузить</button>
+    <ul>
+        <li>
+            <a th:href="@{/admin/users}">Посмотреть список всех пользователей</a>
+        </li>
+        <li>
+            <a th:href="@{/admin/users/add}">Добавить нового пользователя</a>
+        </li>
+        <li>
+            <form th:action="@{/files/upload}" method="post" enctype="multipart/form-data">
+                <input type="file" name="file"/>
+                <button type="submit">Загрузить</button>
+            </form>
+        </li>
+    </ul>
+    <br>
+    <!--    <h3>Выбор пользователя (Отладка)</h3>-->
+    <!--    <p th:text="'Всего пользователей в списке: ' + (${allUsers != null} ? ${allUsers.size()} : 'null')"></p>-->
+
+    <!--    <select name="userEmail" required>-->
+    <!--        <option value="" disabled selected>Выберите пользователя</option>-->
+    <!--        <option th:each="u : ${allUsers}"-->
+    <!--                th:value="${u.email}"-->
+    <!--                th:text="${u.surname} + ' ' + ${u.firstName}">-->
+    <!--        </option>-->
+    <!--    </select>-->
+    <br>
+    <br>
+    <div class="add-event-form">
+        <div style="border: 1px solid red; padding: 10px; margin-bottom: 20px;">
+            <p>Статус пользователей:
+                <span th:text="${allUsers != null ? 'Список получен, размер: ' + allUsers.size() : 'Список ПУСТ'}"></span>
+            </p>
+        </div>
+        <h3>Добавить событие пользователю</h3>
+        <form th:action="@{/events/add}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <input type="text" name="title" placeholder="Название события" required>
+            <input type="date" name="date" required>
+            <select name="userEmail" required>
+                <option value="" disabled selected>Выберите пользователя</option>
+                <option th:each="u : ${allUsers}"
+                        th:value="${u.email}"
+                        th:text="${u.surname} + ' ' + ${u.firstName}"></option>
+            </select>
+
+            <button type="submit">Добавить событие</button>
         </form>
-    </li>
-</ul>
-<a href="/home">На главную</a>
+        <select id="userSelector" onchange="loadEvents()">
+            <option value="" disabled selected>Выберите пользователя для просмотра</option>
+            <option th:each="u : ${allUsers}" th:value="${u.email}" th:text="${u.surname}"></option>
+        </select>
+
+        <div id="eventsList"></div>
+        <!--        <div id="editForm" style="display:none;">-->
+        <!--            <input type="hidden" id="editId">-->
+        <!--            <input type="text" id="editTitle">-->
+        <!--            <input type="date" id="editDate">-->
+        <!--            <button onclick="saveEvent()">Сохранить</button>-->
+        <!--        </div>-->
+    </div>
+    <div id="editForm" style="display:none; border: 1px solid #ccc; padding: 15px; margin-top: 20px;">
+        <h3>Редактировать событие</h3>
+        <input type="hidden" id="editId">
+        <input type="text" id="editTitle" placeholder="Новое название">
+        <input type="date" id="editDate">
+        <button onclick="saveEvent()">Сохранить</button>
+        <button onclick="document.getElementById('editForm').style.display='none'">Отмена</button>
+    </div>
+    <a href="/home">На главную</a>
+</div>
+<script>
+    function getCsrfHeader() {
+        return document.querySelector('meta[name="_csrf_header"]').content;
+    }
+
+    function getCsrfToken() {
+        return document.querySelector('meta[name="_csrf"]').content;
+    }
+
+    function saveEvent() {
+        const eventData = {
+            id: document.getElementById('editId').value,
+            title: document.getElementById('editTitle').value,
+            date: document.getElementById('editDate').value
+        };
+
+        fetch('/admin/events/update', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                [getCsrfHeader()]: getCsrfToken() // Динамически подставляем имя и токен
+            },
+            body: JSON.stringify(eventData)
+        })
+            .then(response => {
+                if (!response.ok) throw new Error('Ошибка: ' + response.status);
+                document.getElementById('editForm').style.display = 'none';
+                loadEvents();
+            })
+            .catch(error => console.error("Ошибка при сохранении:", error));
+    }
+
+    function loadEvents() {
+        const email = document.getElementById('userSelector').value;
+        const container = document.getElementById('eventsList');
+
+        fetch('/admin/events/get?email=' + encodeURIComponent(email))
+            .then(response => response.json())
+            .then(data => {
+                container.innerHTML = '<h3>События пользователя:</h3>';
+                if (data.length === 0) {
+                    container.innerHTML += '<p>Событий нет</p>';
+                } else {
+                    let html = '<table border="1"><tr><th>Название</th><th>Дата</th><th>Действия</th></tr>';
+                    data.forEach(e => {
+                        html += `<tr>
+                            <td>${e.title}</td>
+                            <td>${e.eventDate}</td>
+                            <td>
+                                 <button type="button"onclick="editEvent(${e.id}, '${e.title}', '${e.eventDate}')">Ред.</button>
+                                 <button type="button"onclick="deleteEvent(${e.id})" style="color:red;">Удалить</button>
+                            </td>
+                        </tr>`;
+                    });
+                    html += '</table>';
+                    container.innerHTML += html;
+                }
+            });
+    }
+
+    // Функция заполнения формы и открытия её
+    function editEvent(id, title, date) {
+        document.getElementById('editId').value = id;
+        document.getElementById('editTitle').value = title;
+        document.getElementById('editDate').value = date;
+        document.getElementById('editForm').style.display = 'block';
+    }
+
+    // Функция отправки обновленных данных
+    // function saveEvent() {
+    //     console.log("Кнопка нажата!"); // Проверьте, появляется ли это в F12 -> Console
+    //
+    //     const eventData = {
+    //         id: document.getElementById('editId').value,
+    //         title: document.getElementById('editTitle').value,
+    //         date: document.getElementById('editDate').value
+    //     };
+    //
+    //     console.log("Данные для отправки:", eventData);
+    //
+    //     fetch('/admin/events/update', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'X-XSRF-TOKEN': getCsrfToken()
+    //         },
+    //         body: JSON.stringify(eventData)
+    //     }).then(response => {
+    //         if (response.ok) {
+    //             document.getElementById('editForm').style.display = 'none';
+    //             loadEvents();
+    //         } else {
+    //             alert("Ошибка сохранения:", response.status);
+    //         }
+    //     });
+    // }
+
+    function deleteEvent(id) {
+        if (confirm('Удалить событие?')) {
+            fetch('/admin/events/delete/' + id, {
+                method: 'POST',
+                headers: {
+                    [getCsrfHeader()]: getCsrfToken()
+                }
+            }).then(() => loadEvents());
+        }
+    }
+</script>
 </body>
 </html>

@@ -2,6 +2,7 @@ package io.github.m3_assistant.controller;
 
 // Импорт моделей, репозиториев и необходимых библиотек Spring
 
+import io.github.m3_assistant.model.CalendarEvent;
 import io.github.m3_assistant.model.User;
 import io.github.m3_assistant.repository.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.*;
+import java.util.List;
 import java.util.UUID;
 import java.io.IOException;
 
@@ -37,24 +39,32 @@ private final PasswordEncoder passwordEncoder;
 private final QualificationClassRepository qualificationClassRepository;
 private final TrainRepository trainRepository;
 private final ProfessionRepository professionRepository;
+private final CalendarEventRepository calendarEventRepository;
 
 // Конструктор Spring автоматически подставляет (inject) все нужные репозитории
 public AdminController(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder,
                        QualificationClassRepository qualificationClassRepository, TrainRepository trainRepository,
-                       ProfessionRepository professionRepository) {
+                       ProfessionRepository professionRepository, CalendarEventRepository calendarEvenRepository) {
     this.userRepository = userRepository;
     this.roleRepository = roleRepository;
     this.passwordEncoder = passwordEncoder;
     this.qualificationClassRepository = qualificationClassRepository;
     this.trainRepository = trainRepository;
     this.professionRepository = professionRepository;
+    this.calendarEventRepository = calendarEvenRepository;
 }
 
 /**
  * Отображает главную страницу панели администратора.
  */
 @GetMapping("")
-public String adminDashboard() {
+public String adminDashboard(Model model) {
+    // Передаем всех пользователей, чтобы администратор мог выбрать владельца события
+    List<User> users = userRepository.findAll();
+//    model.addAttribute("allUsers", userRepository.findAll());
+    System.out.println("DEBUG: Найдено пользователей в БД: " + users.size()); // Смотрите в консоль IDE
+    System.out.println("Количество найденных пользователей: " + users.size());
+    model.addAttribute("allUsers", users);
     return "admin_panel"; // Возвращает имя HTML-файла шаблона
 }
 
@@ -72,6 +82,14 @@ public String listUsers(Model model, @AuthenticationPrincipal UserDetails curren
     // Получаем список всех пользователей, кроме самого текущего админа
     model.addAttribute("users", userRepository.findByIdNot(admin.getId()));
     return "admin_users_list"; // Шаблон отображения таблицы
+}
+
+@GetMapping("/events/get")
+@ResponseBody // Важно: возвращаем JSON, а не имя шаблона
+public List<CalendarEvent> getUserEvents(@RequestParam String email) {
+    User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+    return calendarEventRepository.findByUser(user);
 }
 
 /**
