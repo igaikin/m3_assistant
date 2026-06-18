@@ -85,11 +85,17 @@ public ResponseEntity<String> updateEvent(@RequestBody Map<String, String> paylo
     return ResponseEntity.ok("Success");
 }
 
-// Метод для удаления
 @PostMapping("admin/events/delete/{id}")
-@ResponseBody // Возвращаем статус, а не страницу
-public ResponseEntity<String> deleteEventApi(@PathVariable Long id) {
+public String deleteEvent(@PathVariable Long id) {
+    // Сначала находим событие, чтобы узнать его дату
+    CalendarEvent event = calendarEventRepository.findById(id).orElse(null);
     calendarEventRepository.deleteById(id);
-    return ResponseEntity.ok("Deleted");
+
+    if (event != null) {
+        // Возвращаемся в тот же месяц, где было событие
+        return "redirect:/calendar?year=" + event.getEventDate().getYear()
+                + "&month=" + event.getEventDate().getMonthValue();
+    }
+    return "redirect:/calendar";
 }
 }
