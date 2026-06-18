@@ -63,7 +63,7 @@
             // Достаем токены безопасности из мета-тегов
             const csrfToken = document.querySelector('meta[name="_csrf"]').content;
             // Используем относительный путь, который Spring точно поймет
-            const deleteUrl = '/events/delete/' + e.id;
+            const deleteUrl = 'admin/events/delete/' + e.id;
             const canEdit = [[${canEdit}]];
 
             div.innerHTML += `<div class="event-item"><span>${e.title}</span>`;
