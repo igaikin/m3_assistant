@@ -45,6 +45,27 @@
                 </a>
             </div>
         </div>
+        <div class="events-widget">
+            <h3>Мои предстоящие события</h3>
+            <div th:if="${upcomingEvents.isEmpty()}">
+                <p>Событий на сегодня и далее нет.</p>
+            </div>
+
+            <table th:if="${!upcomingEvents.isEmpty()}" border="1">
+                <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Событие</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="event : ${upcomingEvents}">
+                    <td th:text="${event.eventDate}"></td>
+                    <td th:text="${event.title}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
         <br>
         <a href="/files/list">Перейти к полному архиву файлов</a>
         <br>

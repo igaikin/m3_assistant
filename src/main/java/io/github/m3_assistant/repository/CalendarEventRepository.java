@@ -11,4 +11,6 @@ public interface CalendarEventRepository extends JpaRepository<CalendarEvent, Lo
 List<CalendarEvent> findByEventDateBetweenAndUser(LocalDate start, LocalDate end, User user);
 
 List<CalendarEvent> findByUser(User user);
+
+List<CalendarEvent> findByUserAndEventDateGreaterThanEqualOrderByEventDateAsc(User user, LocalDate date);
 }
