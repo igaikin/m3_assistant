@@ -9,17 +9,22 @@
 <body>
 <div class="container">
     <h2>Управление пользователями</h2>
-
+    <br>
+    <a th:href="@{/admin}">Вернуться в панель</a>
+    <br>
+    <a th:href="@{/admin/users/add}">Добавить нового пользователя</a>
+    <br>
     <table border="1">
         <thead>
         <tr>
             <th>Фото</th>
-            <th>ID</th>
+            <!--            <th>ID</th>-->
             <th>Фамилия</th>
             <th>Имя</th>
             <th>Отчество</th>
             <th>Email</th>
             <th>Роль</th>
+            <th>Табельный<br>номер</th>
             <th>Класс<br>квалификации</th>
 
             <th>Состав</th>
@@ -33,12 +38,13 @@
                 <img th:if="${u.avatar}" th:src="@{${u.avatar}}" style="width: 50px; height: 50px; border-radius: 50%;">
                 <span th:unless="${u.avatar}">Нет фото</span>
             </td>
-            <td th:text="${u.id}">1</td>
+            <!--            <td th:text="${u.id}">1</td>-->
             <td th:text="${u.surname}">Имя</td>
             <td th:text="${u.firstName}">Имя</td>
             <td th:text="${u.patronymic}">Имя</td>
             <td th:text="${u.email}">email@example.com</td>
             <td th:text="${u.role?.role}">USER</td>
+            <td th:text="${u.personnelNumber}">Табельный</td>
             <td th:text="${u.qualificationClass?.qualificationClass}">Класс квалификации</td>
             <td th:text="${u.train?.train}">Состав</td>
             <td th:text="${u.profession?.profession}">Должность</td>
@@ -54,7 +60,6 @@
         </tbody>
     </table>
     <br>
-    <a th:href="@{/admin}">Вернуться в панель</a>
 </div>
 </body>
 </html>
